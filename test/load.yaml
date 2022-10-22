@@ -1,0 +1,9 @@
+config:
+  target: "http://localhost:80"
+  phases:
+    - duration: 600
+      arrivalRate: 40
+scenarios:
+  - flow:
+      - get:
+          url: "/"

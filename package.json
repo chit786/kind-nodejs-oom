@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "load:eg1": "artillery run -k",
+    "load:eg2": "curl -X GET 'http://localhost:80/newUser?username=matt&password=password' && ab -k -c 20 -n 250 'http://localhost:80/auth?username=matt&password=password'"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "pprof": "^3.2.0"
+  },
+  "devDependencies": {
+    "artillery": "^2.0.0-23"
+  }
+}
