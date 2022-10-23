@@ -46,5 +46,7 @@ paginate: true
 ## Summary
 - Enable v8 flags `--heapsnapshot-near-heap-limit=3` `--diagnostic-dir` to mounted volume, via command line `NODE_OPTIONS`, this will provide `heap dump` which we can further diagnose in chrome dev tools
 - enable elastic APM module, which will also require code change.
+- configure filebeats for `1.` APM and `2.` uploading `heapdumps` to `S3 bucket`.
 - Preferably test this in `non-prod` environment first
 - sample repo using kind locally to try out various tools with sample applications: https://github.com/chit786/kind-nodejs-oom
+- set `--max-old-space-size` to `70-80%` of the memory allocated to container
