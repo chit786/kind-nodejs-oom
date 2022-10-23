@@ -12,7 +12,7 @@ const dir = "/opt/dumps/example1";
 async function prof() {
   console.log("start to profile >>>");
   const profile = await pprof.time.profile({
-    durationMillis: 15000,
+    durationMillis: 5000,
   });
 
   if (!fs.existsSync(dir)) {
@@ -37,7 +37,10 @@ app.get("/", (req, res) => {
   res.send(`Hello World! - current request size : ${requests.length}`);
 });
 
-prof();
+app.get("/heapdump", (req, res) => {
+  prof();
+  res.send(`triggered profiling`);
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

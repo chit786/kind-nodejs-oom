@@ -4,20 +4,18 @@ const pprof = require("pprof");
 const fs = require("fs");
 const dir = "/opt/dumps/example2";
 
-// original code came from https://nodejs.org/en/docs/guides/simple-profiling/
-
 // The average number of bytes between samples.
 const intervalBytes = 512 * 1024;
-
 // The maximum stack depth for samples collected.
 const stackDepth = 64;
+pprof.heap.start(intervalBytes, stackDepth);
 
-pprof.heap.start(intervalBytes, stackDepth); 
+// original code came from https://nodejs.org/en/docs/guides/simple-profiling/
 
 async function prof() {
   console.log("start to profile >>>");
   const profile = await pprof.time.profile({
-    durationMillis: 15000,
+    durationMillis: 5000,
   });
 
   if (!fs.existsSync(dir)) {
@@ -31,6 +29,23 @@ async function prof() {
     }
   });
   console.log("<<< finished to profile");
+}
+
+async function cpuProfile() {
+  console.log("start to collect cpu profile >>>");
+  const profile = await pprof.heap.profile();
+
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+  }
+
+  const buf = await pprof.encode(profile);
+  fs.writeFile(`${dir}/heap-${Date.now()}.pb.gz`, buf, (err) => {
+    if (err) {
+      throw err;
+    }
+  });
+  console.log("<<< finished to collect cpu profile");
 }
 
 const users = {};
@@ -75,7 +90,10 @@ app.get("/auth", (req, res) => {
   }
 });
 
-prof();
+app.get("/heapdump", (req, res) => {
+  prof().then(() => cpuProfile());
+  res.send(`triggered profiling`);
+});
 
 const server = app.listen(3000, () => {
   const addr = server.address();

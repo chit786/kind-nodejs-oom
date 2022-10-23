@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: express
-        image: leaky-express-example1:1.1
+        image: leaky-express-example1:1.0
         # lifecycle:
         #   preStop:
         #     exec:
@@ -27,11 +27,11 @@ spec:
           mountPath: /opt/dumps
         resources:
           requests:
-            memory: "128Mi"
-            cpu: "125m"
-          limits:
             memory: "256Mi"
             cpu: "250m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
         ports:
         - containerPort: 3000
       volumes:
